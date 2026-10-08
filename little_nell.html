@@ -21,14 +21,19 @@ hr.line{height:1px;background:var(--line);border:0;margin:0 0 24px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
 @media(max-width:720px){.grid{grid-template-columns:1fr}}
 .card{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(40,34,24,.07),0 8px 24px rgba(40,34,24,.06)}
-.frame{position:relative;aspect-ratio:16/9;background:#000;display:block}
-.frame iframe,.frame video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-.frame.portrait{aspect-ratio:9/13}
+.frame{position:relative;aspect-ratio:16/9;background:#1a1712;display:block;width:100%;border:0;padding:0;cursor:pointer;overflow:hidden}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.frame iframe,.frame video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+.frame .btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;background:rgba(14,11,7,.56);border:1.5px solid rgba(255,255,255,.82);color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;padding-left:4px;transition:background .15s ease,transform .15s ease}
+.frame:hover .btn{background:rgba(196,162,101,.9);transform:translate(-50%,-50%) scale(1.07)}
+.frame:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.frame.portrait{aspect-ratio:4/5}
 figcaption{padding:14px 18px 18px}
 figcaption h3{font-size:20px;font-weight:600;margin:0 0 3px}
 figcaption p{font-size:15px;color:var(--muted);margin:0;line-height:1.35}
 footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;text-align:center;line-height:1.6}
 footer b{color:var(--fg)}
+@media(prefers-reduced-motion:reduce){.frame .btn{transition:none}.frame:hover .btn{transform:translate(-50%,-50%)}}
 </style></head><body><div class="wrap">
 
 <header class="mast">
@@ -44,45 +49,38 @@ footer b{color:var(--fg)}
 <hr class="line">
 <div class="grid">
 
-<figure class="card"><div class="frame"><iframe src="https://www.youtube.com/embed/UrGopCwAsnU" title="Bridgerton Strings" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://www.youtube.com/embed/UrGopCwAsnU?autoplay=1" aria-label="Play Bridgerton Strings"><img src="https://img.youtube.com/vi/UrGopCwAsnU/hqdefault.jpg" alt="Bridgerton Strings" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Bridgerton Strings</h3><p>Pop reimagined as elegant string arrangements - the most requested sound for a deck ceremony into cocktail hour.</p></figcaption></figure>
 
-<figure class="card"><div class="frame"><iframe src="https://www.youtube.com/embed/eVE7joci-9E" title="Classical Strings" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://www.youtube.com/embed/eVE7joci-9E?autoplay=1" aria-label="Play Classical Strings"><img src="https://img.youtube.com/vi/eVE7joci-9E/hqdefault.jpg" alt="Classical Strings" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Classical Strings</h3><p>Timeless Vivaldi performed by a classical string quartet.</p></figcaption></figure>
 
-<figure class="card"><div class="frame"><iframe src="https://www.youtube.com/embed/cmCcrBxs2P4" title="Bad Guy - string quartet" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://www.youtube.com/embed/cmCcrBxs2P4?autoplay=1" aria-label="Play Bad Guy"><img src="https://img.youtube.com/vi/cmCcrBxs2P4/hqdefault.jpg" alt="Bad Guy for string quartet" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Bad Guy</h3><p>Pop reimagined for strings, in the Bridgerton vein - the lighter end of the cocktail set.</p></figcaption></figure>
 
-<figure class="card"><div class="frame"><iframe src="https://drive.google.com/file/d/1a1wM67hIIoWF_uk1vTeg4GY01ThssaJF/preview" title="Cinematic Strings" loading="lazy" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://drive.google.com/file/d/1a1wM67hIIoWF_uk1vTeg4GY01ThssaJF/preview" aria-label="Play Cinematic Strings"><img src="p/cinematic.jpg" alt="Cinematic Strings" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Cinematic Strings</h3><p>Dramatic film-score arrangements for a grand ceremony feel.</p></figcaption></figure>
 
-<figure class="card"><div class="frame"><iframe src="https://drive.google.com/file/d/1RmLYqjn99kqkk2tpSV7YQiGKk-0rRlua/preview" title="Epic Strings" loading="lazy" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://drive.google.com/file/d/1RmLYqjn99kqkk2tpSV7YQiGKk-0rRlua/preview" aria-label="Play Epic Strings"><img src="p/epic.jpg" alt="Epic Strings" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Epic Strings</h3><p>Amplified strings with a larger-than-life sound - built for an outdoor deck and a big entrance.</p></figcaption></figure>
 
 </div>
 
-<h2 class="sec">Strings with Piano</h2>
-<p class="note">Warmer and rounder - worth hearing against the quartet.</p>
+<h2 class="sec">Strings with Piano, Guitar or Harp</h2>
+<p class="note">Warmer, rounder textures - worth hearing against the straight quartet.</p>
 <hr class="line">
 <div class="grid">
 
-<figure class="card"><div class="frame"><iframe src="https://www.youtube.com/embed/XHxezog3RvU" title="Strings and Piano - Turning Page" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://www.youtube.com/embed/XHxezog3RvU?autoplay=1" aria-label="Play Strings and Piano"><img src="https://img.youtube.com/vi/XHxezog3RvU/hqdefault.jpg" alt="Strings and Piano" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Strings and Piano</h3><p>Strings blended with piano on Turning Page - a staple for ceremonies.</p></figcaption></figure>
 
-</div>
-
-<h2 class="sec">Strings with Guitar or Harp</h2>
-<p class="note">Softer textures that sit well outdoors.</p>
-<hr class="line">
-<div class="grid">
-
-<figure class="card"><div class="frame"><iframe src="https://www.youtube.com/embed/0SXabFqDkKU" title="Guitar and Strings" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://www.youtube.com/embed/0SXabFqDkKU?autoplay=1" aria-label="Play Guitar and Strings"><img src="https://img.youtube.com/vi/0SXabFqDkKU/hqdefault.jpg" alt="Guitar and Strings" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Guitar and Strings</h3><p>Acoustic guitar layered under strings for a warm, unhurried sound.</p></figcaption></figure>
 
-<figure class="card"><div class="frame"><iframe src="https://drive.google.com/file/d/1Qr6AOvHhQUz9jqI44d24T_ybV_ifN0h5/preview" title="Harp and Strings" loading="lazy" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://drive.google.com/file/d/1Qr6AOvHhQUz9jqI44d24T_ybV_ifN0h5/preview" aria-label="Play Harp and Strings"><img src="p/harp.jpg" alt="Harp and Strings" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Harp and Strings</h3><p>Harp against strings - the most fairytale sound we offer.</p></figcaption></figure>
 
-<figure class="card"><div class="frame portrait"><iframe src="https://drive.google.com/file/d/1E35pLWGuar9OwqZq_34HEx-DyosWV_Vv/preview" title="Guitar and strings, cocktail hour" loading="lazy" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame portrait" type="button" data-embed="https://drive.google.com/file/d/1E35pLWGuar9OwqZq_34HEx-DyosWV_Vv/preview" aria-label="Play Guitar and Strings, cocktail hour"><img src="p/gtrcocktail.jpg" alt="Guitar and strings at cocktail hour" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Guitar + Strings, Cocktail</h3><p>The same pairing loosened up for drinks - this is the ASPENX end of the day.</p></figcaption></figure>
 
 </div>
@@ -92,10 +90,10 @@ footer b{color:var(--fg)}
 <hr class="line">
 <div class="grid">
 
-<figure class="card"><div class="frame"><iframe src="https://drive.google.com/file/d/1lQhk9e6b4N8JjSl6VGdOv7cGwGKDtHTU/preview" title="Piano and saxophone, cocktail hour" loading="lazy" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://drive.google.com/file/d/1lQhk9e6b4N8JjSl6VGdOv7cGwGKDtHTU/preview" aria-label="Play Piano and Saxophone"><img src="p/saxpiano.jpg" alt="Piano and saxophone at cocktail hour" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Piano &amp; Saxophone</h3><p>A lounge pairing for drinks - looser than the quartet, and it carries a room without filling it.</p></figcaption></figure>
 
-<figure class="card"><div class="frame"><video src="https://dl.dropboxusercontent.com/scl/fi/28ezq3b4m88q10usc9ebb/jazz-trio.mp4?rlkey=0w3kwi628r5w906azcje32zex" controls preload="metadata" playsinline></video></div>
+<figure class="card"><button class="frame" type="button" data-video="https://dl.dropboxusercontent.com/scl/fi/28ezq3b4m88q10usc9ebb/jazz-trio.mp4?rlkey=0w3kwi628r5w906azcje32zex" aria-label="Play Jazz Trio"><img src="p/jazz.jpg" alt="Jazz trio" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Jazz Trio</h3><p>An intimate jazz sound for drinks and dinner.</p></figcaption></figure>
 
 </div>
@@ -105,13 +103,41 @@ footer b{color:var(--fg)}
 <hr class="line">
 <div class="grid">
 
-<figure class="card"><div class="frame"><iframe src="https://drive.google.com/file/d/1JIzvc99JfrVc7iU4-YsU-5wQqnAY50Tl/preview" title="Vocals and band" loading="lazy" allowfullscreen></iframe></div>
+<figure class="card"><button class="frame" type="button" data-embed="https://drive.google.com/file/d/1JIzvc99JfrVc7iU4-YsU-5wQqnAY50Tl/preview" aria-label="Play Vocals and Band"><img src="p/welcome1.jpg" alt="Vocalist with a band" loading="lazy"><span class="btn">&#9654;</span></button>
 <figcaption><h3>Vocals and Band</h3><p>A full, lit set with a singer out front - the louder, livelier end of a welcome party.</p></figcaption></figure>
 
-<figure class="card"><div class="frame"><iframe src="https://drive.google.com/file/d/1TBygBj9OlKDDTLA07Inslo_S_X_HNKM8/preview" title="Candlelit acoustic set" loading="lazy" allowfullscreen></iframe></div>
-<figcaption><h3>Candlelit Acoustic</h3><p>Guitar and voice by candlelight - quiet enough that people keep talking over it.</p></figcaption></figure>
+<figure class="card"><button class="frame" type="button" data-embed="https://drive.google.com/file/d/1TBygBj9OlKDDTLA07Inslo_S_X_HNKM8/preview" aria-label="Play Candlelit Acoustic"><img src="p/welcome2.jpg" alt="Acoustic set by candlelight" loading="lazy"><span class="btn">&#9654;</span></button>
+<figcaption><h3>Candlelit Acoustic</h3><p>Guitar and voice by candlelight - warm and close, for a dinner that wants atmosphere rather than volume.</p></figcaption></figure>
 
 </div>
 
 <footer><b>Anton Alex Smirnov</b><br>Elope Music &middot; elopemusic.com &middot; (303) 888-4658</footer>
-</div></body></html>
+</div>
+
+<script>
+// Click-to-load: every card shows a still until it is asked for, so nothing
+// opens on a black rectangle and twelve players do not load at once.
+document.querySelectorAll(".frame").forEach(function (f) {
+  f.addEventListener("click", function () {
+    if (f.dataset.loaded) return;
+    f.dataset.loaded = "1";
+    var el;
+    if (f.dataset.embed) {
+      el = document.createElement("iframe");
+      el.src = f.dataset.embed;
+      el.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+      el.setAttribute("allowfullscreen", "");
+      el.setAttribute("title", f.getAttribute("aria-label") || "Video");
+    } else {
+      el = document.createElement("video");
+      el.src = f.dataset.video;
+      el.controls = true;
+      el.autoplay = true;
+      el.playsInline = true;
+    }
+    f.innerHTML = "";
+    f.appendChild(el);
+  });
+});
+</script>
+</body></html>
