@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sort the Demo Library</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f7f5f0;--surface:#fffdf9;--fg:#1c1a17;--muted:#78716a;--line:#e6e1d6;--accent:#c4a265;--del:#b4453a;--shadow:0 1px 3px rgba(40,34,24,.08),0 8px 22px rgba(40,34,24,.06)}
+@media(prefers-color-scheme:dark){:root{--bg:#17150f;--surface:#211e17;--fg:#f0ece3;--muted:#a69f92;--line:#322d22;--accent:#d8b877;--del:#e07a6e;--shadow:0 1px 3px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"EB Garamond",Georgia,serif}
+.wrap{max-width:860px;margin:0 auto;padding:34px 16px 120px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+h1{font-size:29px;font-weight:600;margin:0 0 6px}
+.lede{color:var(--muted);font-size:16px;margin:0 0 18px;line-height:1.4}
+.addbar{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+.addbar input{flex:1;min-width:160px;font-family:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+.counts{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 18px}
+.chip{font-size:12.5px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 11px;color:var(--muted)}
+.chip b{color:var(--fg)}
+.row{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px;margin-bottom:9px;box-shadow:var(--shadow)}
+.row .vid{flex:0 0 190px;aspect-ratio:16/9;background:#000;border-radius:7px;overflow:hidden}
+.row video{width:100%;height:100%;display:block}
+.row .mid{flex:1;min-width:0}
+.row .name{font-size:15px;overflow-wrap:anywhere;margin-bottom:7px}
+.row select{font-family:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 8px;max-width:210px}
+.row.changed{border-color:var(--accent)}
+.row.del{border-color:var(--del);background:color-mix(in srgb,var(--del) 9%,var(--surface))}
+.row.del select{border-color:var(--del);color:var(--del)}
+.row.leave{opacity:.6}
+@media(max-width:560px){.row{flex-direction:column;align-items:stretch}.row .vid{flex-basis:auto;width:100%}}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 20px rgba(40,34,24,.08);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bar .msg{flex:1;min-width:120px;color:var(--muted);font-size:14px}
+button{font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;border-radius:8px;padding:9px 15px;border:1px solid var(--accent);background:var(--accent);color:#1c1a17}
+button.ghost{background:transparent;color:var(--accent)}
+details{margin-top:14px}summary{cursor:pointer;color:var(--muted);font-size:14px}
+pre{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+</style></head><body><div class="wrap">
+<p class="eyebrow">Elope Music &middot; /Anton/demo</p>
+<h1>Sort the Demo Library</h1>
+<p class="lede">Press play to preview any clip. Set its folder, add your own folders, or mark it Delete. Then <b>Copy decisions</b> and paste back - nothing moves or deletes until you approve. Deletes go to Dropbox trash (recoverable).</p>
+<div class="addbar"><input id="newcat" placeholder="Add a folder (e.g. Cocktail hour)" maxlength="40"><button class="ghost" id="addbtn">Add folder</button></div>
+<div class="counts" id="counts"></div>
+<div id="list"></div>
+<details id="out"><summary>See the decisions list</summary><pre id="pre"></pre></details>
+</div>
+<div class="bar"><span class="msg" id="msg">Preview, assign, then copy.</span>
+<button class="ghost" id="reset">Reset to my picks</button><button id="copy">Copy decisions</button></div>
+<script>
+const DATA=[{"name": "Fiddle and guitar duo - Shaky Street.mp4", "cat": "Guitar", "src": "https://dl.dropboxusercontent.com/scl/fi/71l64l2xce93n8vxsdigb/Fiddle-and-guitar-duo-Shaky-Street.mp4?rlkey=tmkv2krdn95uba9s8dwoabezx"}, {"name": "Guitar and strings cocktail.mp4", "cat": "Guitar", "src": "https://dl.dropboxusercontent.com/scl/fi/9eptho2res9y5r6jodx0u/Guitar-and-strings-cocktail.mp4?rlkey=f05z9wjupnvc8cg9kvfor8mi2"}, {"name": "Zac Brown - Free - violin and guitar.mp4", "cat": "Guitar", "src": "https://dl.dropboxusercontent.com/scl/fi/bnfxa2t9lef709usg0d2r/Zac-Brown-Free-violin-and-guitar.mp4?rlkey=m2e524cmllwnei0ywh21r6eq4"}, {"name": "Cocktail trio violin guitar bass.mov", "cat": "Guitar", "src": "https://dl.dropboxusercontent.com/scl/fi/3lz95vl2u33ztkn27rjlm/Cocktail-trio-violin-guitar-bass.mov?rlkey=uuynd3grl31nsl3123lzftc2q"}, {"name": "vivaldi demo.mp4", "cat": "Strings & Classical", "src": "https://dl.dropboxusercontent.com/scl/fi/srs6lv8osae83t4dhq4zp/vivaldi-demo.mp4?rlkey=4xoiyb1qz797tliivgs7xfb4d"}, {"name": "Panis Angelicus.mov", "cat": "Strings & Classical", "src": "https://dl.dropboxusercontent.com/scl/fi/1z1m0fux0faddecunws4f/Panis-Angelicus.mov?rlkey=mygbcv0bw6iyq5uqz8jx3lozf"}, {"name": "Ritz sextet.MOV", "cat": "Strings & Classical", "src": "https://dl.dropboxusercontent.com/scl/fi/dta42ptijkhko8zjny0xc/Ritz-sextet.MOV?rlkey=pfexylxgx03mmwvduwipa0wm6"}, {"name": "Violin Cello duo.MOV", "cat": "Strings & Classical", "src": "https://dl.dropboxusercontent.com/scl/fi/wf8waygfii79c5v5kj8ct/Violin-Cello-duo.MOV?rlkey=aq1elh7qmtxbkd01eo7t6fagt"}, {"name": "Lazy Stud Ranch - entrance strings.mp4", "cat": "Strings & Classical", "src": "https://dl.dropboxusercontent.com/scl/fi/nr4d7abhiooedb7swon27/Lazy-Stud-Ranch-entrance-strings.mp4?rlkey=271ci8ennpx78clfnwrryc8gg"}, {"name": "Clair de Lune demo.mov", "cat": "Strings & Classical", "src": "https://dl.dropboxusercontent.com/scl/fi/fzg21exmtt0emb56f9y28/Clair-de-Lune-demo.mov?rlkey=7jyk9rgpxyazedvkj4610s1js"}, {"name": "nirvana piano trio clean.mov", "cat": "Piano", "src": "https://dl.dropboxusercontent.com/scl/fi/7ad737iiqegnma71kevok/nirvana-piano-trio-clean.mov?rlkey=qglf5g1dwhjm7r1ts8p0kyoz2"}, {"name": "Nirvana piano trio.mp4", "cat": "Piano", "src": "https://dl.dropboxusercontent.com/scl/fi/bk51o3j5mjmr275078i62/Nirvana-piano-trio.mp4?rlkey=f6iu8o42gxhcab0dxfdt2alel"}, {"name": "piano cocktail hour.mov", "cat": "Piano", "src": "https://dl.dropboxusercontent.com/scl/fi/0cuyyuebmog4lqmcw6bav/piano-cocktail-hour.mov?rlkey=qvnhqitygdi38nkmv9lkfgq5s"}, {"name": "harp solo demo.mov", "cat": "Harp", "src": "https://dl.dropboxusercontent.com/scl/fi/xu1ww3upxqi0gpe9hhtul/harp-solo-demo.mov?rlkey=d5thfa9rhbogpyjissd5ilhjb"}, {"name": "sextet with harp and piano- a thousand years.mp4", "cat": "Harp", "src": "https://dl.dropboxusercontent.com/scl/fi/ggz28knc3ztofu3805796/sextet-with-harp-and-piano-a-thousand-years.mp4?rlkey=3ee5e52vqvcg9px1fjh4f0bhx"}, {"name": "Sextet with harp and piano a thousand years.mov", "cat": "Harp", "src": "https://dl.dropboxusercontent.com/scl/fi/6m3z5c8sdjbkbrcyunww5/Sextet-with-harp-and-piano-a-thousand-years.mov?rlkey=mgljscvhskrtopuztgolq3f9m"}, {"name": "Ritz sextet harp piano strings.MOV", "cat": "Harp", "src": "https://dl.dropboxusercontent.com/scl/fi/drkbgnfga8q7mgxrscsa6/Ritz-sextet-harp-piano-strings.MOV?rlkey=y9rei55ieikkm7yyxz3l6zb8r"}, {"name": "Jazz quartet.mp4", "cat": "Jazz & Cocktail", "src": "https://dl.dropboxusercontent.com/scl/fi/qhntyigfozdfesdnb3sgx/Jazz-quartet.mp4?rlkey=20zpj2racpeu9hb13h3dkmuhj"}, {"name": "Jazz quartet 2.mp4", "cat": "Jazz & Cocktail", "src": "https://dl.dropboxusercontent.com/scl/fi/q4gu18oowmwqqszjw9sic/Jazz-quartet-2.mp4?rlkey=mgzq4xqzwknyqmtvoiikbegpr"}, {"name": "jazz cocktails.mp4", "cat": "Jazz & Cocktail", "src": "https://dl.dropboxusercontent.com/scl/fi/14vtlmgk3tds7mt8q1k5k/jazz-cocktails.mp4?rlkey=9xv7tc3w7s7mettve67rb6o4d"}, {"name": "Ipanema trio.mov", "cat": "Jazz & Cocktail", "src": "https://dl.dropboxusercontent.com/scl/fi/kq9b37h2cljhjf4nq0a95/Ipanema-trio.mov?rlkey=n28v6p3ermtkf13nxlkhou28t"}, {"name": "Sax DJ afterparty fusion.mp4", "cat": "DJ & Afterparty", "src": "https://dl.dropboxusercontent.com/scl/fi/4ulo3m57m3z4zbvo17ceq/Sax-DJ-afterparty-fusion.mp4?rlkey=2ysg8r7b4w9qlb1tmts36n2k4"}, {"name": "sax fusion afterparty.mp4", "cat": "DJ & Afterparty", "src": "https://dl.dropboxusercontent.com/scl/fi/wkz7mqjmf8u5x2s4wzo3b/sax-fusion-afterparty.mp4?rlkey=71zfd56ocpb6qfw7ykmq9pcwc"}, {"name": "DJ fusion live.mov", "cat": "DJ & Afterparty", "src": "https://dl.dropboxusercontent.com/scl/fi/kcdenvs2fououu9va44oj/DJ-fusion-live.mov?rlkey=uycgm9og6gp79pp6mpq4sodb2"}, {"name": "DJ Fusion TH.mp4", "cat": "DJ & Afterparty", "src": "https://dl.dropboxusercontent.com/scl/fi/0onw6vksryp94eky05cfk/DJ-Fusion-TH.mp4?rlkey=fshzkvk7svjmk0545nwgxguiy"}, {"name": "Violin solo.mp4", "cat": "Solo", "src": "https://dl.dropboxusercontent.com/scl/fi/3yhvtanssgk43y9y16u6u/Violin-solo.mp4?rlkey=chagqtnlrlcdz5loub0q82ij3"}, {"name": "Demo Aleik - HD 720p.mov", "cat": "Leave in /demo", "src": "https://dl.dropboxusercontent.com/scl/fi/496jhx7yletvnn9i5hijj/Demo-Aleik-HD-720p.mov?rlkey=ygs3rrn03dbq1myjfy5qakhs1"}, {"name": "Aleik-el.mp4", "cat": "Leave in /demo", "src": "https://dl.dropboxusercontent.com/scl/fi/zwx1duqwvjxk3q2x6f5fb/Aleik-el.mp4?rlkey=ehebmkymnb5roprwvaaapoz9z"}, {"name": "Elope medley 2.mp4", "cat": "Leave in /demo", "src": "https://dl.dropboxusercontent.com/scl/fi/hvhcn7tim044jlbtj05ep/Elope-medley-2.mp4?rlkey=81l1fa6jpnscf763yvjxrftpx"}, {"name": "SALLY GRACE.m4v", "cat": "Leave in /demo", "src": "https://dl.dropboxusercontent.com/scl/fi/ddzhs2v12ypbwseb5r9l4/SALLY-GRACE.m4v?rlkey=emc05oq2vbq6s5e7qe2d3qmuy"}];
+const BASE=["Strings & Classical","Guitar","Piano","Harp","Jazz & Cocktail","DJ & Afterparty","Solo","Vocals"];
+const KEY="sortdemos2";
+let st={};try{st=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+st.cat=st.cat||{};st.custom=st.custom||[];
+const def=Object.fromEntries(DATA.map(d=>[d.name,d.cat]));
+function cats(){return [...BASE,...st.custom,"Leave in /demo","Delete"]}
+function cur(n){return st.cat[n]||def[n]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+const list=document.getElementById("list");
+function render(){
+ list.innerHTML="";
+ DATA.forEach(d=>{
+  const v=cur(d.name);
+  const row=document.createElement("div");
+  row.className="row"+(v!==def[d.name]?" changed":"")+(v==="Delete"?" del":"")+(v==="Leave in /demo"?" leave":"");
+  const vid=document.createElement("div");vid.className="vid";
+  vid.innerHTML=d.src?'<video controls preload="none" src="'+d.src+'"></video>':'';
+  const mid=document.createElement("div");mid.className="mid";
+  const nm=document.createElement("div");nm.className="name";nm.textContent=d.name;
+  const sel=document.createElement("select");
+  cats().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=(c==="Delete"?"\uD83D\uDDD1 Delete":c);if(c===v)o.selected=true;sel.appendChild(o)});
+  sel.addEventListener("change",()=>{st.cat[d.name]=sel.value;save();render()});
+  mid.appendChild(nm);mid.appendChild(sel);row.appendChild(vid);row.appendChild(mid);list.appendChild(row);
+ });
+ const by={};DATA.forEach(d=>{const c=cur(d.name);by[c]=(by[c]||0)+1});
+ const el=document.getElementById("counts");el.innerHTML="";
+ cats().forEach(c=>{if(!by[c])return;const s=document.createElement("span");s.className="chip";s.innerHTML=c+" <b>"+by[c]+"</b>";el.appendChild(s)});
+}
+function decisions(){
+ const mv=DATA.filter(d=>{const c=cur(d.name);return c!=="Leave in /demo"&&c!=="Delete"}).map(d=>d.name+"  =>  "+cur(d.name));
+ const del=DATA.filter(d=>cur(d.name)==="Delete").map(d=>d.name);
+ let t="";if(mv.length)t+="MOVES:\n"+mv.join("\n");if(del.length)t+=(t?"\n\n":"")+"DELETE:\n"+del.join("\n");
+ return t||"(everything left in /demo)";
+}
+document.getElementById("addbtn").addEventListener("click",()=>{
+ const el=document.getElementById("newcat");const v=el.value.trim();
+ if(v&&!cats().includes(v)){st.custom.push(v);save();render();el.value="";document.getElementById("msg").textContent='Added folder "'+v+'".';}
+});
+document.getElementById("newcat").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("addbtn").click()});
+document.getElementById("copy").addEventListener("click",async()=>{
+ const t=decisions();document.getElementById("pre").textContent=t;document.getElementById("out").open=true;
+ const m=document.getElementById("msg");
+ try{await navigator.clipboard.writeText(t);m.textContent="Copied - paste it back to me.";}
+ catch(e){const p=document.getElementById("pre");const r=document.createRange();r.selectNodeContents(p);const s=getSelection();s.removeAllRanges();s.addRange(r);m.textContent="Select the list below and copy.";}
+});
+document.getElementById("reset").addEventListener("click",()=>{st.cat={};save();render();document.getElementById("msg").textContent="Back to my picks.";});
+render();
+</script></body></html>
